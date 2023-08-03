@@ -18,9 +18,8 @@ const NavBar = observer(() => {
         user.setIsAuth(false)
     }
     const deleteHandler = (e) => {
-        console.log(user.user.id);
         deleteUser(user.user.id).then(data=>{
-            console.log(data)
+            logOut()
         }).catch(e=>console.log(e))
     }
 

@@ -58,7 +58,7 @@ class UserController {
                 id: id
             }
         })
-        return res.json(`Пользователь ${user.id}: ${user.email} успешно удален`)
+        return res.json(`Пользователь успешно удален`)
     }
 
     async getAll(req, res) {
