@@ -8,6 +8,7 @@ import {Button} from "react-bootstrap";
 import {observer} from "mobx-react-lite";
 import Container from "react-bootstrap/Container";
 import {useHistory} from 'react-router-dom'
+import {deleteUser} from "../http/userAPI";
 const NavBar = observer(() => {
     const {user} = useContext(Context)
     const history = useHistory()
@@ -16,10 +17,17 @@ const NavBar = observer(() => {
         user.setUser({})
         user.setIsAuth(false)
     }
+    const deleteHandler = (e) => {
+        console.log(user.user.id);
+        deleteUser(user.user.id).then(data=>{
+            console.log(data)
+        }).catch(e=>console.log(e))
+    }
 
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
+                <Button className={'mr-3'} onClick={deleteHandler} style={{color:'white'}}>DELETE USER</Button>
                 <NavLink style={{color:'white'}} to={SHOP_ROUTE}>КупиДевайс</NavLink>
                 {user.isAuth ?
                     <Nav className="ml-auto" style={{color: 'white'}}>

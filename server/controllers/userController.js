@@ -1,7 +1,7 @@
 const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt') // Шифрует данные
 const jwt = require('jsonwebtoken')
-const {User, Basket} = require('../models/models') // Импортируем нужный тип из БД
+const {User, Basket, Brand} = require('../models/models') // Импортируем нужный тип из БД
 
 const generateJwt = (id, email, role) => {
     return jwt.sign(
@@ -40,6 +40,35 @@ class UserController {
         }
         const token = generateJwt(user.id, user.email, user.role)
         return res.json({token})
+    }
+
+    async delete(req, res, next) {
+        const {id} = req.params
+        const user = await User.findOne({where: {id}})
+        if (!user) {
+            return next(ApiError.internal('Пользователь не найден'))
+        }
+        const dest = await User.destroy({
+            where: {
+                id: id
+            }
+        })
+        const bask = await Basket.destroy({
+            where: {
+                id: id
+            }
+        })
+        return res.json(`Пользователь ${user.id}: ${user.email} успешно удален`)
+    }
+
+    async getAll(req, res) {
+        const users = await User.findAll()
+        return res.json(users)
+    }
+    async getUser(req, res) {
+        const {id} = req.params
+        const user = await User.findOne({where: {id}})
+        return res.json(user)
     }
 
     async check(req, res, next) {
